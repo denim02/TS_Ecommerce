@@ -12,7 +12,7 @@ const InputField = forwardRef(function InputField(
   const { className, ...otherProps } = rest;
 
   return (
-    <div className={label && "space-y-2"}>
+    <div className={label && "space-x-2"}>
       {label && (
         <label
           className={cn(
@@ -26,7 +26,7 @@ const InputField = forwardRef(function InputField(
       )}
       <input
         name={name}
-        id={id ?? name}
+        id={id}
         value={value}
         defaultValue={defaultValue}
         onChange={handleChange}

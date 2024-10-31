@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import cn from "../../utils/index";
+import { cn } from "../../utils/index";
 
 const Button = ({ label, children, handleClick, ...rest }) => {
   const { className, type, ...otherProps } = rest;

@@ -17,7 +17,7 @@ const Link = ({ children, to, variant = "plain", ...rest }) => {
   return (
     <RouterLink
       className={cn(
-        "text-sm px-2 py-1 text-slate-900 hover:text-slate-600 rounded-md",
+        "text-sm px-2 py-1 text-slate-900 hover:text-slate-600 rounded-md transition-colors duration-300",
         theme === THEME_OPTIONS.DARK_MODE && "text-white hover:text-purple-200",
         variant === LINK_VARIANTS.underline &&
           "relative no-underline after:content-[''] after:absolute after:bottom-1 after:h-[1px] after:w-full after:scale-x-0 after:hover:scale-x-100 after:transition after:duration-300 after:origin-left",

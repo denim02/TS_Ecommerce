@@ -1,19 +1,22 @@
-import { createContext, useCallback, useReducer } from "react";
+import { createContext, useCallback, useEffect, useReducer } from "react";
 import PropTypes from "prop-types";
+import { retrieve, store } from "../utils";
 
 // Cart Item object:
 // {
 //  id: number;
 //  quantity: number;
 // }
-const INITIAL_VALUES = {
+const INITIAL_STATE = {
   cartItems: [],
 };
 
 const ACTION_TYPE = {
   ADD_PRODUCT: "ADD_PRODUCT",
   REMOVE_PRODUCT: "REMOVE_PRODUCT",
+  SET_QUANTITY: "SET_QUANTITY",
   CLEAR_CART: "CLEAR_CART",
+  SET_STATE: "SET_STATE",
 };
 
 const cartReducer = (state, action) => {
@@ -60,8 +63,23 @@ const cartReducer = (state, action) => {
               ),
       };
     }
+    case ACTION_TYPE.SET_QUANTITY: {
+      return {
+        ...state,
+        cartItems:
+          action.payload.quantity > 0
+            ? state.cartItems.map((entry) =>
+                entry.id === action.payload.id
+                  ? { ...entry, quantity: action.payload.quantity }
+                  : entry
+              )
+            : state.cartItems.filter((entry) => entry.id !== action.payload.id),
+      };
+    }
     case ACTION_TYPE.CLEAR_CART:
       return { ...state, cartItems: [] };
+    case ACTION_TYPE.SET_STATE:
+      return action.payload;
     default:
       throw new Error(`Unknown action type: ${action.type}`);
   }
@@ -70,14 +88,12 @@ const cartReducer = (state, action) => {
 export const cartContext = createContext({});
 
 const CartProvider = ({ children }) => {
-  const [state, dispatch] = useReducer(cartReducer, INITIAL_VALUES);
-
-  console.log(state);
+  const [state, dispatch] = useReducer(cartReducer, INITIAL_STATE);
 
   const addProduct = useCallback((id, quantity = 1) => {
     dispatch({
       type: ACTION_TYPE.ADD_PRODUCT,
-      payload: { id, quantity },
+      payload: { id, quantity: +quantity },
     });
   }, []);
 
@@ -88,11 +104,31 @@ const CartProvider = ({ children }) => {
     });
   }, []);
 
+  const setProductQuantity = useCallback((id, quantity) => {
+    dispatch({
+      type: ACTION_TYPE.SET_QUANTITY,
+      payload: { id, quantity },
+    });
+  }, []);
+
   const clearCart = useCallback(() => {
     dispatch({
       type: ACTION_TYPE.CLEAR_CART,
     });
   }, []);
+
+  // Initialize state
+  useEffect(() => {
+    dispatch({
+      type: ACTION_TYPE.SET_STATE,
+      payload: retrieve("cart") ?? INITIAL_STATE,
+    });
+  }, []);
+
+  // Persist state
+  useEffect(() => {
+    if (state !== INITIAL_STATE) store("cart", state);
+  }, [state]);
 
   return (
     <cartContext.Provider
@@ -100,6 +136,7 @@ const CartProvider = ({ children }) => {
         cartItems: state.cartItems,
         addProduct,
         removeProduct,
+        setProductQuantity,
         clearCart,
       }}
     >
