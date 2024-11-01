@@ -10,7 +10,7 @@ const Card = ({ children, ...rest }) => {
   return (
     <div
       className={cn(
-        "bg-white border border-gray-200 rounded-lg shadow",
+        "bg-white border border-gray-200 rounded-lg shadow transition-colors duration-300",
         theme === THEME_OPTIONS.DARK_MODE && "bg-gray-800 border-gray-700",
         className
       )}

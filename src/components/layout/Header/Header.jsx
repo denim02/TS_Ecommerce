@@ -24,7 +24,7 @@ const Header = () => {
   return (
     <header
       className={cn(
-        "border-b border-b-gray-400 py-3",
+        "border-b border-b-gray-400 py-3 transition-colors duration-300",
         theme === THEME_OPTIONS.DARK_MODE &&
           "border-b-slate-500 bg-slate-900 text-white"
       )}

@@ -12,7 +12,7 @@ const Layout = () => {
       <Header />
       <main
         className={cn(
-          "min-h-screen py-8 px-4 bg-slate-100",
+          "min-h-screen py-8 px-4 bg-slate-100 transition-colors duration-300",
           theme === THEME_OPTIONS.DARK_MODE && "bg-gray-900"
         )}
       >
